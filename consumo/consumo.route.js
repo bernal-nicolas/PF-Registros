@@ -7,12 +7,9 @@ const { authenticateToken } = require('../middleware/auth');
 async function GetConsumos(req, res) {
     try {
         const resultadosBusqueda = await readConsumoConFiltros(req.query);
-
-        res.status(200).json({
-            ...resultadosBusqueda
-        });
+        res.status(200).json(resultadosBusqueda);
     } catch (e) {
-        res.status(500).json({ msg: "" });
+        respondWithError(res, e);
     }
 }
 
