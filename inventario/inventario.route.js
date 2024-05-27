@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { readInventarioConFiltros, createInventario, updateInventario, deleteInventario } = require("./inventario.controller");
 const { respondWithError } = require('../utils/functions');
-const { authenticateToken } = require('../middleware/auth');
+const { authenticateToken, getTokenID } = require('../middleware/auth');
 
 async function GetInventarios(req, res) {
     try {
+        req.query.userID = getTokenID(req)
         const resultadosBusqueda = await readInventarioConFiltros(req.query);
         res.status(200).json(resultadosBusqueda);
     } catch (e) {
@@ -15,6 +16,7 @@ async function GetInventarios(req, res) {
 
 async function PostInventario(req, res) {
     try {
+        req.body.userID = getTokenID(req)
         await createInventario(req.body);
         res.status(201).json({ mensaje: "Inventario creado con éxito." });
     } catch (e) {
