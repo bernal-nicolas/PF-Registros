@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { readConsumoConFiltros, createConsumo, updateConsumo, deleteConsumo } = require("./consumo.controller");
 const { respondWithError } = require('../utils/functions');
-const { authenticateToken } = require('../middleware/auth');
+const { authenticateToken, getTokenID } = require('../middleware/auth');
 
 async function GetConsumos(req, res) {
     try {
+        req.query.userID = getTokenID(req)
         const resultadosBusqueda = await readConsumoConFiltros(req.query);
         res.status(200).json(resultadosBusqueda);
     } catch (e) {
